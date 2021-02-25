@@ -1,7 +1,14 @@
-import { DateTime } from "luxon";
-import React from "react";
-import styled from "styled-components";
-import { calculateLeftValue, calculateWidthValue, isIntervalFree } from "../../utils";
+import { DateTime } from 'luxon';
+import React, { useContext } from 'react';
+import styled from 'styled-components';
+import {
+  calculateLeftValue,
+  calculateWidthValue,
+  isIntervalFree,
+  getActiveEvents,
+} from '../../utils';
+import { DashboardContext } from '../../App';
+import { IDashboardContext } from '../../types/Dashboard';
 
 interface RootProps {
   left: number;
@@ -16,7 +23,7 @@ const Root = styled.div<RootProps>`
   border-right: 5px solid #585858;
   width: ${({ width }) => width}px;
   left: ${({ left }) => left}px;
-  background:${({ free }) => free ? "#4CAF50" : "#f44336b8"};
+  background: ${({ free }) => (free ? '#4CAF50' : '#f44336b8')};
   z-index: 1;
   transition: all 170ms ease-in;
   box-sizing: border-box;
@@ -27,17 +34,21 @@ interface SelectedTimeProps {
 }
 
 const SelectedTime: React.FC<SelectedTimeProps> = ({ timeLineStart }) => {
-  const events =
-  const selectedStart =
-  const selectedEnd =
+  const {
+    timeEvents,
+    timeStart,
+    timeEnd,
+    filter,
+  }: IDashboardContext = useContext(DashboardContext);
+  const selectedStart = timeStart;
+  const selectedEnd = timeEnd;
+  const events = getActiveEvents(timeEvents, filter);
 
   const left = calculateLeftValue(timeLineStart, selectedStart);
   const width = calculateWidthValue(selectedStart, selectedEnd);
   const free = isIntervalFree(events, selectedStart, selectedEnd);
 
-  return (
-    <Root left={left} width={width} free={free}/>
-  )
+  return <Root left={left} width={width} free={free} />;
 };
 
 export default SelectedTime;

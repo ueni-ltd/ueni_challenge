@@ -1,12 +1,11 @@
 import { Button, FormControl, InputLabel, MenuItem } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
-import TextField from '@material-ui/core/TextField';
 import { DateTime } from 'luxon';
-import React, { HTMLAttributes, useCallback, useContext } from 'react'
+import React, { HTMLAttributes } from 'react';
 import styled from 'styled-components';
 import useControlsBar from './hooks/useControlBar';
 import Datetime from 'react-datetime';
-import "react-datetime/css/react-datetime.css";
+import 'react-datetime/css/react-datetime.css';
 import { isEmpty } from 'lodash';
 
 const Root = styled.div`
@@ -48,48 +47,59 @@ interface ControlBarProps extends HTMLAttributes<HTMLDivElement> {
   timeLineStart: DateTime;
 }
 
-const ControlsBar: React.FC<ControlBarProps> = ({ timeLineStart, ...props }) => {
-  const { start, end, nameFilterOptions, nameFilterValue, onEndChange, onFilterChange, onStartChange } = useControlsBar();
+const ControlsBar: React.FC<ControlBarProps> = ({
+  timeLineStart,
+  ...props
+}) => {
+  const {
+    start,
+    end,
+    nameFilterOptions,
+    nameFilterValue,
+    onEndChange,
+    onFilterChange,
+    onStartChange,
+  } = useControlsBar();
 
   return (
     <Root {...props}>
       <StyledDateTimeFormControl>
         <InputLabel shrink>Start</InputLabel>
-        <Datetime
-          value={start.toJSDate()}
-          onChange={onStartChange}
-        />
+        <Datetime value={start.toJSDate()} onChange={onStartChange} />
       </StyledDateTimeFormControl>
 
       <StyledDateTimeFormControl>
         <InputLabel shrink>End</InputLabel>
-        <Datetime
-          value={end.toJSDate()}
-          onChange={onEndChange}
-        />
+        <Datetime value={end.toJSDate()} onChange={onEndChange} />
       </StyledDateTimeFormControl>
 
       <StyledOrganizerField>
         <InputLabel shrink>Organizer</InputLabel>
         <Select
           value={nameFilterValue}
-          onChange={(e) => { onFilterChange(e.target.value as string)}}
+          onChange={(e) => {
+            onFilterChange(e.target.value as string);
+          }}
         >
-          {nameFilterOptions.map((name) => <MenuItem key={name} value={name}>{name}</MenuItem>)}
+          {nameFilterOptions.map((name, i) => (
+            <MenuItem key={`${name}-${i}`} value={name}>
+              {name}
+            </MenuItem>
+          ))}
         </Select>
       </StyledOrganizerField>
-      
-      { !isEmpty(nameFilterValue) ? (
-        <StyledResetButton 
-          variant="contained" 
-          color={"primary"} 
+
+      {!isEmpty(nameFilterValue) ? (
+        <StyledResetButton
+          variant="contained"
+          color={'primary'}
           onClick={() => onFilterChange(null)}
         >
           Delete filter
         </StyledResetButton>
       ) : null}
     </Root>
-  )
-}
+  );
+};
 
-export default ControlsBar
+export default ControlsBar;
