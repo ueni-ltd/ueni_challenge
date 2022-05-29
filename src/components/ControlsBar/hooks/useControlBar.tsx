@@ -1,9 +1,9 @@
-import { DateTime } from "luxon";
-import { Moment } from "moment";
+import { DateTime } from 'luxon';
+import { Moment } from 'moment';
 
 interface Response {
-  start: DateTime,
-  end: DateTime,
+  start: DateTime;
+  end: DateTime;
   nameFilterValue: null | string;
   nameFilterOptions: Array<string>;
   onStartChange: (value: Moment | string) => void;
@@ -12,7 +12,15 @@ interface Response {
 }
 
 function useControlsBar(): Response {
-
+  return {
+    start: DateTime.local(),
+    end: DateTime.local(),
+    nameFilterValue: null,
+    nameFilterOptions: [],
+    onStartChange: (value: Moment | string) => {},
+    onEndChange: (value: Moment | string) => {},
+    onFilterChange: (value: string | null) => {},
+  };
 }
 
 export default useControlsBar;
