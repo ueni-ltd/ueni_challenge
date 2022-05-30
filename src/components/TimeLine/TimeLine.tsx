@@ -1,10 +1,11 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useContext, useRef } from 'react';
 import styled from 'styled-components';
 import { calculateWidthValue as calculateWidth } from '../../utils';
 import { last, first } from 'lodash';
 import { DateTime } from 'luxon';
 import calculateNewInterval from './utils';
 import { TimeEvent } from '../../types/TimeEvent';
+import { Context } from '../../state/store';
 
 interface RootProps {
   width: number;
@@ -33,7 +34,7 @@ interface TimeLineProps {
 const TimeLine: React.FC<TimeLineProps> = ({ children, timeLineStart }) => {
   const selectedStart = DateTime.local();
   const selectedEnd = DateTime.local();
-  const events: TimeEvent[] = [];
+  const { events } = useContext(Context);
 
   const contentRef = useRef<HTMLDivElement | null>(null);
   const width = calculateWidth(timeLineStart, DateTime.fromISO(last(events)?.end ?? ''));

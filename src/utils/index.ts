@@ -15,7 +15,7 @@ export function calculateLeftValue(timeLineStart: DateTime, selectedStart: DateT
  */
 export function calculateWidthValue(selectedStart: DateTime, selectedEnd: DateTime): number {
   const res = selectedEnd.diff(selectedStart).as('minutes') * MINUTE_TO_PIXEL_RATIO;
-  return isNaN(res) ? 0 : res;
+  return isNaN(res) ? 100 : res;
 }
 
 export function isIntervalFree(events: TimeEvent[], intervalStart: DateTime, intervalEnd: DateTime): boolean {
