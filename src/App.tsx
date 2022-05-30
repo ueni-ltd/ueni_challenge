@@ -38,12 +38,6 @@ function App() {
     getEvents();
   }, [dispatch]);
 
-  /** NOTE
-   * Rather than fetch events, effectively polling, we should hook into event changes, so we can refresh our cache of events each
-   * time a change occurs.
-   * Proir to this, I won't bother calling events regularly, just once, on load of the app.
-   **/
-
   return (
     <Root className="App">
       <StyledControlBar timeLineStart={timeLineStart} />
