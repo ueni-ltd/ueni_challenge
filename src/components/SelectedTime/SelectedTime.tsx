@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { TimeEvent } from '../../types/TimeEvent';
+import { Context } from '../../state/store';
 import { calculateLeftValue, calculateWidthValue, isIntervalFree } from '../../utils';
 
 interface RootProps {
@@ -28,9 +28,7 @@ interface SelectedTimeProps {
 }
 
 const SelectedTime: React.FC<SelectedTimeProps> = ({ timeLineStart }) => {
-  const events: TimeEvent[] = [];
-  const selectedStart = DateTime.local();
-  const selectedEnd = DateTime.local();
+  const { events, selectedStart, selectedEnd, dispatch } = useContext(Context);
 
   const left = calculateLeftValue(timeLineStart, selectedStart);
   const width = calculateWidthValue(selectedStart, selectedEnd);

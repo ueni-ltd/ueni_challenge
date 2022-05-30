@@ -25,7 +25,7 @@ const Content = styled.div<RootProps>`
 
 interface TimeLineProps {
   /**
-   * Time of the day from which first event dispalyed on the TimeLine can start. Defaults to 00:00:00:00 local time.
+   * Time of the day from which first event displayed on the TimeLine can start. Defaults to 00:00:00:00 local time.
    */
   timeLineStart: DateTime;
 }
