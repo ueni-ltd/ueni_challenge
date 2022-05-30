@@ -1,9 +1,10 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useContext, useRef } from 'react';
 import styled from 'styled-components';
-import calculateWidth from '../../generator/utils/calculateWidth';
-import { last, first } from 'lodash';
+import { calculateWidthValue as calculateWidth } from '../../utils';
+import { last } from 'lodash';
 import { DateTime } from 'luxon';
 import calculateNewInterval from './utils';
+import { Context } from '../../state/store';
 
 interface RootProps {
   width: number;
@@ -19,32 +20,48 @@ const Content = styled.div<RootProps>`
   position: relative;
   height: 100px;
   background: #f0f0f0;
-  width: ${({width}) => width}px;
+  width: ${({ width }) => width}px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
 interface TimeLineProps {
+  /**
+   * Time of the day from which first event displayed on the TimeLine can start. Defaults to 00:00:00:00 local time.
+   */
   timeLineStart: DateTime;
 }
 
 const TimeLine: React.FC<TimeLineProps> = ({ children, timeLineStart }) => {
-  const selectedStart =
-  const selectedEnd =
-  const events =
+  const { events, selectedStart, selectedEnd, dispatch } = useContext(Context);
 
-  const contentRef = useRef<HTMLDivElement| null>(null);
-  const width = calculateWidth(timeLineStart, DateTime.fromISO(last(events)?.end ?? ""));
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const width = calculateWidth(timeLineStart, DateTime.fromISO(last(events)?.end ?? ''));
 
-  const onClick = useCallback((e: React.MouseEvent) => {
-    const { start, end } = calculateNewInterval(timeLineStart, selectedStart, selectedEnd, contentRef.current!, e.clientX);
+  const onClick = useCallback(
+    (e: React.MouseEvent) => {
+      const { start, end } = calculateNewInterval(
+        timeLineStart,
+        selectedStart,
+        selectedEnd,
+        contentRef.current!,
+        e.clientX,
+      );
 
-    // TODO: set new states
-  }, [])
+      dispatch({ type: 'SET_END', value: end });
+      dispatch({ type: 'SET_START', value: start });
+    },
+    [selectedStart, selectedEnd, dispatch, timeLineStart],
+  );
 
   return (
     <Root>
-      <Content ref={contentRef} width={width} onClick={onClick}>{children}</Content>
+      <Content ref={contentRef} width={width} onClick={onClick}>
+        {children}
+      </Content>
     </Root>
-  )
-}
+  );
+};
 
 export default TimeLine;
