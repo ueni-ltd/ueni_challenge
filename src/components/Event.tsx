@@ -6,7 +6,6 @@ import { calculateLeftValue, calculateWidthValue } from '../utils';
 interface Props {
   timeLineStart: DateTime;
   item: TimeEvent;
-  loading: boolean;
 }
 
 const Root = styled.div<{ left: number; width: number }>`
@@ -18,8 +17,7 @@ const Root = styled.div<{ left: number; width: number }>`
   box-sizing: border-box;
 `;
 
-const Event: React.FC<Props> = ({ timeLineStart, item, loading }) => {
-  if (loading) return null;
+const Event: React.FC<Props> = ({ timeLineStart, item }) => {
   const { start, end, name } = item;
 
   const left = calculateLeftValue(timeLineStart, DateTime.fromISO(start));

@@ -25,11 +25,9 @@ const Root = styled.div<RootProps>`
 
 interface SelectedTimeProps {
   timeLineStart: DateTime;
-  loading: boolean;
 }
 
-const SelectedTime: React.FC<SelectedTimeProps> = ({ timeLineStart, loading }) => {
-  if (loading) return null;
+const SelectedTime: React.FC<SelectedTimeProps> = ({ timeLineStart }) => {
   const events: TimeEvent[] = [];
   const selectedStart = DateTime.local();
   const selectedEnd = DateTime.local();

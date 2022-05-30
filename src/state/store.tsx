@@ -1,9 +1,12 @@
+import { DateTime } from 'luxon';
 import React, { createContext, useReducer } from 'react';
 import reducer, { State } from './reducer';
 
 const defaultState: State = {
   events: [],
   dispatch: () => {},
+  selectedStart: DateTime.local(),
+  selectedEnd: DateTime.local(),
 };
 
 export const Context = createContext(defaultState);

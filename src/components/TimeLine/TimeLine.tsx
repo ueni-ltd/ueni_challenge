@@ -1,10 +1,9 @@
 import React, { useCallback, useContext, useRef } from 'react';
 import styled from 'styled-components';
 import { calculateWidthValue as calculateWidth } from '../../utils';
-import { last, first } from 'lodash';
+import { last } from 'lodash';
 import { DateTime } from 'luxon';
 import calculateNewInterval from './utils';
-import { TimeEvent } from '../../types/TimeEvent';
 import { Context } from '../../state/store';
 
 interface RootProps {
@@ -32,9 +31,7 @@ interface TimeLineProps {
 }
 
 const TimeLine: React.FC<TimeLineProps> = ({ children, timeLineStart }) => {
-  const selectedStart = DateTime.local();
-  const selectedEnd = DateTime.local();
-  const { events } = useContext(Context);
+  const { events, selectedStart, selectedEnd, dispatch } = useContext(Context);
 
   const contentRef = useRef<HTMLDivElement | null>(null);
   const width = calculateWidth(timeLineStart, DateTime.fromISO(last(events)?.end ?? ''));
@@ -48,7 +45,8 @@ const TimeLine: React.FC<TimeLineProps> = ({ children, timeLineStart }) => {
       e.clientX,
     );
 
-    // TODO: set new states
+    dispatch({ type: 'SET_START', value: start });
+    dispatch({ type: 'SET_END', value: end });
   }, []);
 
   return (

@@ -20,11 +20,8 @@ const StyledControlBar = styled(ControlsBar)`
 
 function App() {
   const timeLineStart = useMemo(() => DateTime.local().set({ minute: 0, hour: 0, second: 0, millisecond: 0 }), []);
-  console.log('timeLineStart', timeLineStart);
-
   const { events, dispatch } = useContext(Context);
 
-  //const [events, setEvents] = useState<TimeEvent[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -41,10 +38,6 @@ function App() {
     getEvents();
   }, []);
 
-  console.log(events);
-
-  //save events to global state
-
   /** NOTE
    * Rather than fetch events, effectively polling, we should hook into event changes, so we can refresh our cache of events each
    * time a change occurs.
@@ -56,10 +49,11 @@ function App() {
       <StyledControlBar timeLineStart={timeLineStart} />
       <Timeline timeLineStart={timeLineStart}>
         <Loader loading={loading} />
-        {events.map((event) => {
-          return <Event key={event.id} timeLineStart={timeLineStart} item={event} loading={loading}></Event>;
-        })}
-        <SelectedTime timeLineStart={timeLineStart} loading={loading}></SelectedTime>
+        {!loading &&
+          events.map((event) => {
+            return <Event key={event.id} timeLineStart={timeLineStart} item={event}></Event>;
+          })}
+        {!loading && <SelectedTime timeLineStart={timeLineStart}></SelectedTime>}
       </Timeline>
     </Root>
   );
