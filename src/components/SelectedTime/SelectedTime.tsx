@@ -28,7 +28,7 @@ interface SelectedTimeProps {
 }
 
 const SelectedTime: React.FC<SelectedTimeProps> = ({ timeLineStart }) => {
-  const { events, selectedStart, selectedEnd, dispatch } = useContext(Context);
+  const { events, selectedStart, selectedEnd } = useContext(Context);
 
   const left = calculateLeftValue(timeLineStart, selectedStart);
   const width = calculateWidthValue(selectedStart, selectedEnd);
