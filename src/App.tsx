@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import Timeline from './components/TimeLine';
 import { DateTime } from 'luxon';
 import ControlsBar from './components/ControlsBar/ControlsBar';
 import styled from 'styled-components';
 import Loader from './components/Loader';
 import fetchEvents from './api/fetchEvents';
-import { TimeEvent } from './types/TimeEvent';
 import Event from './components/Event';
 import SelectedTime from './components/SelectedTime';
 import { Context } from './state/store';
@@ -19,8 +18,8 @@ const StyledControlBar = styled(ControlsBar)`
 `;
 
 function App() {
-  const timeLineStart = useMemo(() => DateTime.local().set({ minute: 0, hour: 0, second: 0, millisecond: 0 }), []);
-  const { events, dispatch } = useContext(Context);
+  const timeLineStart = useMemo(() => DateTime.local(), []);
+  const { filteredEvents, dispatch } = useContext(Context);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -30,13 +29,14 @@ function App() {
       const axiosResponse = await fetchEvents();
       if (axiosResponse.status === 200) {
         dispatch({ type: 'SET_EVENTS', value: axiosResponse.data });
+        dispatch({ type: 'SET_FILTERED_EVENTS', value: axiosResponse.data });
       } else {
         alert(axiosResponse.statusText);
       }
       setLoading(false);
     }
     getEvents();
-  }, []);
+  }, [dispatch]);
 
   /** NOTE
    * Rather than fetch events, effectively polling, we should hook into event changes, so we can refresh our cache of events each
@@ -50,7 +50,7 @@ function App() {
       <Timeline timeLineStart={timeLineStart}>
         <Loader loading={loading} />
         {!loading &&
-          events.map((event) => {
+          filteredEvents.map((event) => {
             return <Event key={event.id} timeLineStart={timeLineStart} item={event}></Event>;
           })}
         {!loading && <SelectedTime timeLineStart={timeLineStart}></SelectedTime>}

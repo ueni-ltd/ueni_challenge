@@ -15,6 +15,9 @@ const Root = styled.div<{ left: number; width: number }>`
   height: 80px;
   border: 1px solid;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Event: React.FC<Props> = ({ timeLineStart, item }) => {

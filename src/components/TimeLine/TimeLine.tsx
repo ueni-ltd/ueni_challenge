@@ -21,6 +21,9 @@ const Content = styled.div<RootProps>`
   height: 100px;
   background: #f0f0f0;
   width: ${({ width }) => width}px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
 interface TimeLineProps {
@@ -36,18 +39,21 @@ const TimeLine: React.FC<TimeLineProps> = ({ children, timeLineStart }) => {
   const contentRef = useRef<HTMLDivElement | null>(null);
   const width = calculateWidth(timeLineStart, DateTime.fromISO(last(events)?.end ?? ''));
 
-  const onClick = useCallback((e: React.MouseEvent) => {
-    const { start, end } = calculateNewInterval(
-      timeLineStart,
-      selectedStart,
-      selectedEnd,
-      contentRef.current!,
-      e.clientX,
-    );
+  const onClick = useCallback(
+    (e: React.MouseEvent) => {
+      const { start, end } = calculateNewInterval(
+        timeLineStart,
+        selectedStart,
+        selectedEnd,
+        contentRef.current!,
+        e.clientX,
+      );
 
-    dispatch({ type: 'SET_START', value: start });
-    dispatch({ type: 'SET_END', value: end });
-  }, []);
+      dispatch({ type: 'SET_END', value: end });
+      dispatch({ type: 'SET_START', value: start });
+    },
+    [selectedStart, selectedEnd, dispatch, timeLineStart],
+  );
 
   return (
     <Root>

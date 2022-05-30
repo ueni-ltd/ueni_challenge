@@ -6,7 +6,8 @@ const defaultState: State = {
   events: [],
   dispatch: () => {},
   selectedStart: DateTime.local(),
-  selectedEnd: DateTime.local(),
+  selectedEnd: DateTime.local().plus({ minutes: 180 }),
+  filteredEvents: [],
 };
 
 export const Context = createContext(defaultState);
