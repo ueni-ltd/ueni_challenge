@@ -18,14 +18,8 @@ interface Response {
 
 function useControlsBar(): Response {
   const [nameFilterValue, setNameFilterValue] = useState<Response['nameFilterValue']>('');
-  const [nameFilterOptions, setNameFilterOptions] = useState<Response['nameFilterOptions']>([]);
 
-  const { events, selectedStart, selectedEnd, dispatch } = useContext(Context);
-  const uniqueNames = useMemo(() => uniq(map(events, 'name')), [events]);
-
-  useEffect(() => {
-    setNameFilterOptions(uniqueNames);
-  }, [events, uniqueNames]);
+  const { events, selectedStart, selectedEnd, filterOptions, dispatch } = useContext(Context);
 
   const onStartChange: Response['onStartChange'] = (value) => {
     if (typeof value === 'string') {
@@ -57,7 +51,7 @@ function useControlsBar(): Response {
     start: selectedStart,
     end: selectedEnd,
     nameFilterValue,
-    nameFilterOptions,
+    nameFilterOptions: filterOptions,
     onStartChange,
     onEndChange,
     onFilterChange,

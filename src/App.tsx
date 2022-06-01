@@ -1,13 +1,9 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import Timeline from './components/TimeLine';
 import { DateTime } from 'luxon';
 import ControlsBar from './components/ControlsBar/ControlsBar';
 import styled from 'styled-components';
-import Loader from './components/Loader';
-import fetchEvents from './api/fetchEvents';
-import Event from './components/Event';
-import SelectedTime from './components/SelectedTime';
-import { Context } from './state/store';
+import Store from './state/store';
 
 const Root = styled.div`
   padding: 2rem;
@@ -19,36 +15,13 @@ const StyledControlBar = styled(ControlsBar)`
 
 function App() {
   const timeLineStart = useMemo(() => DateTime.local(), []);
-  const { filteredEvents, dispatch } = useContext(Context);
-
-  const [loading, setLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    async function getEvents() {
-      setLoading(true);
-      const axiosResponse = await fetchEvents();
-      if (axiosResponse.status === 200) {
-        dispatch({ type: 'SET_EVENTS', value: axiosResponse.data });
-        dispatch({ type: 'SET_FILTERED_EVENTS', value: axiosResponse.data });
-      } else {
-        alert(axiosResponse.statusText);
-      }
-      setLoading(false);
-    }
-    getEvents();
-  }, [dispatch]);
 
   return (
     <Root className="App">
-      <StyledControlBar timeLineStart={timeLineStart} />
-      <Timeline timeLineStart={timeLineStart}>
-        <Loader loading={loading} />
-        {!loading &&
-          filteredEvents.map((event) => {
-            return <Event key={event.id} timeLineStart={timeLineStart} item={event}></Event>;
-          })}
-        {!loading && <SelectedTime timeLineStart={timeLineStart}></SelectedTime>}
-      </Timeline>
+      <Store>
+        <StyledControlBar timeLineStart={timeLineStart} />
+        <Timeline timeLineStart={timeLineStart}></Timeline>
+      </Store>
     </Root>
   );
 }

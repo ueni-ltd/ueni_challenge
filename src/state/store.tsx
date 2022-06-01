@@ -8,6 +8,7 @@ const defaultState: State = {
   selectedStart: DateTime.local(),
   selectedEnd: DateTime.local().plus({ minutes: 180 }),
   filteredEvents: [],
+  filterOptions: [],
 };
 
 export const Context = createContext(defaultState);
